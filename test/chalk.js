@@ -78,6 +78,17 @@ test('support variable number of arguments', t => {
 	t.is(chalk.red('foo', 'bar'), '\u{1B}[31mfoo bar\u{1B}[39m');
 });
 
+test('two arguments are joined the same way as three or more', t => {
+	// `Array#join` renders `null` and `undefined` as empty strings, so the
+	// two-argument form must not stringify them as "null"/"undefined" the way
+	// `+` concatenation does. This keeps the two-argument form consistent with
+	// the three-or-more form and with the documented "separated by space" rule.
+	for (const value of [null, undefined]) {
+		t.is(chalk.red(value, 'bar'), `\u{1B}[31m${[value, 'bar'].join(' ')}\u{1B}[39m`);
+		t.is(chalk.red('foo', value), `\u{1B}[31m${['foo', value].join(' ')}\u{1B}[39m`);
+	}
+});
+
 test('support falsy values', t => {
 	t.is(chalk.red(0), '\u{1B}[31m0\u{1B}[39m');
 });

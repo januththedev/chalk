@@ -177,10 +177,8 @@ const createBuilder = (self, _styler, _isEmpty) => {
 			return applyStyle(builder, '' + arguments_[0]);
 		}
 
-		if (arguments_.length === 2) {
-			return applyStyle(builder, arguments_[0] + ' ' + arguments_[1]);
-		}
-
+		// `Array#join` renders `null` and `undefined` as empty, unlike concatenation
+		// with `+`, which would stringify them.
 		return applyStyle(builder, arguments_.join(' '));
 	};
 
